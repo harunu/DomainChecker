@@ -16,10 +16,9 @@ const FavoriteDomainCard = ({ domain, onSelected, isSelected, onReCheck }) => (
       <p><strong>Last Checked:</strong> {new Date(domain.lastChecked).toLocaleString()}</p>
       <p><strong>Expiry Date:</strong> {domain.expiryDate ? new Date(domain.expiryDate).toLocaleDateString() : 'N/A'}</p>
     </div>
-    <button onClick={() => onReCheck(domain)} className="actionButton">Re-check</button>
+    <button onClick={() => onReCheck(domain)} disabled={!isSelected} className="actionButton">Re-check</button>
   </div>
 );
-
 const Favorites = () => {
   const [favorites, setFavorites] = useState([]);
   const [selectedIds, setSelectedIds] = useState([]);
@@ -28,15 +27,23 @@ const Favorites = () => {
   const itemsPerPage = 3; 
 
   const dispatch = useDispatch();
-
-  const onReCheck = async (domain) => {
-    const actionResult = await dispatch(performSearch(domain.name));
-    const result = actionResult.payload; 
-    if (result) {
-      // Update the specific domain in the favorites list with new result
-      setFavorites(favorites.map(fav => fav.id === domain.id ? { ...fav, ...result } : fav));
+  const onReCheck = async (domainToCheck) => {
+    if (!selectedIds.includes(domainToCheck.id)) {
+      console.error("Attempted to re-check an unselected domain.");
+      return;
     }
-  };
+    setIsLoading(true);
+    const actionResult = await dispatch(performSearch(domainToCheck.name));
+    const result = actionResult.payload;
+    setIsLoading(false);
+    if (result) {
+      setFavorites((currentFavorites) =>
+        currentFavorites.map((fav) =>
+          fav.id === domainToCheck.id ? { ...fav, ...result } : fav
+        )
+      );
+    }
+  };  
   const loadFavorites = async () => {
     setIsLoading(true); // Indicate loading
     try {
@@ -65,7 +72,7 @@ const Favorites = () => {
   
     setIsLoading(true); 
     try {
-      const updatedFavorites = await fetchFavorites(); // Re-fetch the updated list of favorites
+      const updatedFavorites = await fetchFavorites(); 
       setFavorites(updatedFavorites); // Update the state with the fetched favorites
       setIsLoading(false);
   
@@ -84,9 +91,15 @@ const Favorites = () => {
   };
   
   const toggleSelected = (id) => {
-    setSelectedIds(ids => ids.includes(id) ? ids.filter(_id => _id !== id) : [...ids, id]);
+    setSelectedIds((currentSelectedIds) => {
+      if (currentSelectedIds.includes(id)) {
+        return currentSelectedIds.filter(selectedId => selectedId !== id);
+      } else {
+        return [...currentSelectedIds, id];
+      }
+    });
   };
-
+  
   useEffect(() => {
     loadFavorites();
   }, []);
