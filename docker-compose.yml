@@ -1,0 +1,18 @@
+﻿version: '3.8'
+services:
+  webapp:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:80"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: http://+:80
+
+  ui:
+    build: 
+      context: ./DomainChecker/app  # Assuming the UI's Dockerfile is in the app folder
+    ports:
+      - "3000:80"
+
