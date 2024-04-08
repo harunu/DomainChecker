@@ -25,6 +25,8 @@ To start the application, run the following command in the root directory of you
 git clone https://github.com/harunu/DomainChecker.git
 cd yourprojectdirectory (C:\Users\Dell\Documents\GitHub\DomainChecker)
 docker-compose up --build
+![image](https://github.com/harunu/DomainChecker/assets/34203838/92bbb9cf-28fc-432a-aa0d-bebe89b2122b)
 
+![image](https://github.com/harunu/DomainChecker/assets/34203838/685148a8-cc98-46b9-81b4-db9a2218d3bb)
 
 
