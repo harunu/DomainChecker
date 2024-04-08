@@ -1,0 +1,35 @@
+.shared-horizontal-align {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 150px; 
+    color: white; 
+    text-transform: uppercase; 
+  }
+  
+  .home-hero {
+    background: #003366; 
+  }
+  
+  .favorites-hero {
+    background: #add8e6; 
+  }
+  
+  .search-hero {
+    background: #3F51B5; 
+  }
+  
+  .page-title {
+    font-size: 2rem; 
+    animation: fadeIn 1s; 
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  
